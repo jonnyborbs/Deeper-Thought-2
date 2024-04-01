@@ -231,6 +231,8 @@ int step[]              = {0x01, 6,     077};
 #define GETSWITCH(flip)   !( (switchstatus [ flip[0] ] >> flip[1]) & flip[2] )
 #define GETSWITCHES(flip)  ( (switchstatus [ flip[0] ] >> flip[1]) & flip[2] )
 
+// global define for jawnyDo access
+char *my_fname = "/home/pdp/scrollText.txt";
 
 int terminate=0;
 
@@ -294,9 +296,16 @@ void ClearAllLEDs()	// function added by Norman Davie - used by Pong mode
 	STORE(runLED,            0);
 }
 
+void jawnyDo() {
+    int jawnySwitches = 0;
+
+    // TODO: Update xxxxx with appropriate offset
+    jawnySwitches = (GETSWITCHES(step) & xxxxxx);
+    snprintf(my_fname, 32, “/home/pdp/scrollText-%d.txt”, jawnySwitches);
+}
+
 void loadMsg(char *tmpMsg) {
 	char my_line[256];
-	char *my_fname = "/home/pdp/scrollText.txt";
 	FILE *my_file;
 	my_file = fopen(my_fname, "r");
 	time_t t = time(NULL);
@@ -742,6 +751,7 @@ int main( int argc, char *argv[] )
 			STORE(linkLED,     0);
 
 			if (msgPos == 0 && charPos == 0) {
+			    	jawnyDo();
 				loadMsg(msg);
 				msgLen = strlen(msg);
 			}
